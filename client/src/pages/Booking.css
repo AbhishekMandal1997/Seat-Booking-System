@@ -1,7 +1,6 @@
 .seat-container {
     display: grid;
     grid-template-columns: repeat(7, 40px);
-    /* 7 seats per row */
     gap: 12px;
     justify-content: center;
     margin: 20px auto;
