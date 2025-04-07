@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
             try {
                 const response = await api.get('/auth/me');
                 setUser(response.data);
-            } catch (error) {
+            } catch {
                 setUser(null);
             } finally {
                 setLoading(false);
@@ -27,8 +27,8 @@ export const AuthProvider = ({ children }) => {
             const response = await api.post('/auth/login', { email, password });
             setUser(response.data.user);
             return response.data;
-        } catch (error) {
-            throw error;
+        } catch {
+            throw new Error('Login failed');
         }
     };
 
@@ -37,8 +37,8 @@ export const AuthProvider = ({ children }) => {
             const response = await api.post('/auth/register', { name, email, password });
             setUser(response.data.user);
             return response.data;
-        } catch (error) {
-            throw error;
+        } catch {
+            throw new Error('Registration failed');
         }
     };
 
@@ -64,4 +64,4 @@ export const useAuth = () => {
         throw new Error('useAuth must be used within an AuthProvider');
     }
     return context;
-}; 
+};

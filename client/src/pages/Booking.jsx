@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import SeatRow from "../components/SeatRow";
 import Alert from "../components/Alert";
+import "./Booking.css"; // Make sure to import your CSS if separate
 
 export const Booking = () => {
     const [bookedSeats, setBookedSeats] = useState([]);
@@ -13,7 +13,6 @@ export const Booking = () => {
     const fetchSeats = async () => {
         try {
             const res = await axios.get("/api/booking/seats");
-            console.log("Fetched booked seats:", res.data);
             setBookedSeats(res.data);
         } catch (error) {
             setMessage({
@@ -30,19 +29,15 @@ export const Booking = () => {
     const handleSeatClick = (row, seat) => {
         const seatId = `${row}-${seat}`;
         const isBooked = bookedSeats.some((s) => s.row === row && s.seat === seat);
-        
-        if (isBooked) {
-            console.log('Seat is booked, cannot select:', seatId);
-            return;
-        }
 
-        setSelectedSeats(prevSelected => {
+        if (isBooked) return;
+
+        setSelectedSeats((prevSelected) => {
             if (prevSelected.includes(seatId)) {
-                return prevSelected.filter(id => id !== seatId);
+                return prevSelected.filter((id) => id !== seatId);
             } else if (prevSelected.length < numSeats) {
                 return [...prevSelected, seatId];
             }
-            console.log('Selection limit reached:', { numSeats, current: prevSelected.length });
             return prevSelected;
         });
     };
@@ -63,7 +58,6 @@ export const Booking = () => {
                     return { row, seat };
                 }),
             };
-            console.log("Booking payload:", payload);
             const { data } = await axios.post("/api/booking/book", payload, {
                 headers: { Authorization: `Bearer ${token}` },
             });
@@ -83,13 +77,18 @@ export const Booking = () => {
     const resetBookings = async () => {
         setLoading(true);
         try {
-            const { data } = await axios.post("/api/booking/reset");
+            const token = localStorage.getItem("token");
+            if (!token) throw new Error("Please log in first");
+            
+            const { data } = await axios.post("/api/booking/reset", {}, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             setMessage({ text: data.message, type: "success" });
             setSelectedSeats([]);
             fetchSeats();
         } catch (err) {
             setMessage({
-                text: err.response?.data?.message || "Reset failed",
+                text: err.response?.data?.message || err.message || "Reset failed",
                 type: "error",
             });
         } finally {
@@ -97,22 +96,29 @@ export const Booking = () => {
         }
     };
 
-    const renderSeatRows = () => {
-        const rows = [];
-        for (let row = 0; row < 12; row++) {
-            const seatsInRow = row === 11 ? 3 : 7;
-            rows.push(
-                <SeatRow
-                    key={row}
-                    row={row}
-                    seats={seatsInRow}
-                    bookedSeats={bookedSeats}
-                    selectedSeats={selectedSeats}
-                    onSeatClick={handleSeatClick}
-                />
+    const renderSeatGrid = () => {
+        const seats = [];
+        for (let i = 0; i < 80; i++) {
+            const row = Math.floor(i / 7);
+            const seat = i % 7;
+            if (row === 11 && seat > 2) continue;
+
+            const seatId = `${row}-${seat}`;
+            const isBooked = bookedSeats.some((s) => s.row === row && s.seat === seat);
+            const isSelected = selectedSeats.includes(seatId);
+
+            seats.push(
+                <button
+                    key={seatId}
+                    className={`seat ${isBooked ? "booked" : isSelected ? "selected" : "available"}`}
+                    onClick={() => handleSeatClick(row, seat)}
+                    disabled={isBooked}
+                >
+                    {row * 7 + seat + 1}
+                </button>
             );
         }
-        return rows;
+        return seats;
     };
 
     return (
@@ -129,7 +135,7 @@ export const Booking = () => {
             )}
             <div className="mb-6">
                 <label className="block text-gray-700 font-semibold mb-2">
-                    Number of Seats (1-7)
+                    Number of Seats (1–7)
                 </label>
                 <input
                     type="number"
@@ -144,7 +150,7 @@ export const Booking = () => {
                     className="w-24 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
             </div>
-            <div className="grid gap-3">{renderSeatRows()}</div>
+            <div className="seat-container">{renderSeatGrid()}</div>
             <div className="mt-6 flex justify-between items-center">
                 <div>
                     Selected:{" "}

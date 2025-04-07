@@ -49,4 +49,16 @@ router.post('/book', auth, async (req, res) => {
     }
 });
 
+// Reset all bookings (admin only)
+router.post('/reset', auth, async (req, res) => {
+    try {
+        // Delete all bookings
+        await Booking.deleteMany({});
+        res.json({ message: 'All bookings have been reset' });
+    } catch (error) {
+        console.error('Reset error:', error);
+        res.status(500).json({ message: 'Server error during reset' });
+    }
+});
+
 module.exports = router;

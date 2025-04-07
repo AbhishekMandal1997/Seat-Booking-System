@@ -1,4 +1,4 @@
-General Reset & Base Styles
+/* General Reset & Base Styles
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #f4f6f8;
@@ -10,7 +10,6 @@ body {
     min-height: 100vh;
 }
 
-/* Main container for pages */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -18,7 +17,6 @@ body {
     margin-top: 40px;
 }
 
-/* Navbar */
 .navbar {
     background-color: #003566;
     color: white;
@@ -36,7 +34,6 @@ body {
     font-size: 16px;
 }
 
-/* Alert Styles */
 .alert {
     padding: 12px 20px;
     border-radius: 6px;
@@ -58,7 +55,6 @@ body {
     border: 1px solid #4caf50;
 }
 
-/* Seat Layout */
 .seat-layout {
     display: flex;
     flex-direction: column;
@@ -68,14 +64,12 @@ body {
     gap: 14px;
 }
 
-/* Each row of seats */
 .seat-row {
     display: flex;
     gap: 12px;
     justify-content: center;
 }
 
-/* Individual seat */
 .seat {
     width: 50px;
     height: 50px;
@@ -94,7 +88,6 @@ body {
     background-color: #43a047;
 }
 
-/* Booked seat - dull and non-interactive */
 .seat.booked {
     background-color: #b0b0b0;
     border-color: #9e9e9e;
@@ -103,20 +96,17 @@ body {
     cursor: not-allowed;
 }
 
-/* Selected seat - blue highlight */
 .seat.selected {
     background-color: #2196f3;
     border-color: #1976d2;
 }
 
-/* Seat label (if used) */
 .seat-label {
     margin-top: 4px;
     font-size: 12px;
     color: #555;
 }
 
-/* Form Styling (Login / Register) */
 .form-card {
     width: 100%;
     max-width: 400px;
@@ -164,7 +154,6 @@ body {
     background-color: #00254d;
 }
 
-/* Responsive for mobile */
 @media screen and (max-width: 768px) {
     .seat {
         width: 40px;
@@ -180,4 +169,4 @@ body {
     .form-card {
         margin: 40px 16px;
     }
-}
+} */

@@ -5,7 +5,8 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Booking from './pages/Booking';
-import AdminPanel from './components/AdminPanel';
+
+
 // import './styles/TrainMate.css'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/booking" element={<Booking />} />
+
         </Routes>
       </div>
     </AuthProvider>
